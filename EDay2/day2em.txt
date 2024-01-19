@@ -1,0 +1,496 @@
+STRING OPERATIONS
+
+char A[20]="abcdbss";
+char B[20];
+
+//A==B ...not possible (compares address)
+//A=B  ....not possible(assigns address)
+
+
+
+STRING FUNCTIONS
+
+1)strlen
+//not counts null char
+
+//takes address as argument and counts until null
+
+int myStrlen(char data[])
+{
+
+int indx=0;
+
+while(data[indx])
+{
+indx+;
+
+}
+
+return indx;
+
+
+}
+
+2)strcpy(d,s)
+
+
+void myStrcpy(char x1[],char x2[])
+{
+int indx=0;
+
+while(x2[indx])
+{
+	x1[indx]=x2[indx];
+	indx++;
+
+}
+x1[indx]='\0';
+}
+
+3)if(strcmp(A,B)==0) //strings are equal
+
+if(strcmp(A,B)>0) //A's ascii greater
+
+
+================================================================================
+
+STATIC VARIABLES
+
+CTRL C:TERMINATE
+
+
+void myHandler()
+{
+
+int nattempts=0;
+printf("Signal handled in signal handler function");
+nattempts++;
+
+if(nattempts==6)
+	exit(0);
+
+
+
+}
+
+signal(SIGINT,myHandler);//called when ctrl c pressed
+
+
+//here , even if press the button twice , it displays nattempts=1
+//static declared only once and before the main() and not destroyed 
+
+Solution : declare nattempts as static ..to retain the value because stack frame is destroyed
+
+eg:android phone lock
+
+===================================================================================
+
+POINTERS
+
+holds address
+
+null holds 0 address whereas '\0' is a char having 0 ascii
+
+int num=10;
+int *ptr;
+ptr=&num;
+
+ptr // adress it points to...same as &num//
+*ptr // dereferencing ie getting value//10
+
+sizeof pointer is same for all data types (as it holds address )  and it depends on machine(32/64 bit )
+
+string pool content cant be changed
+
+===========================================================================
+
+int arr[10]={1,2,3,4,5,6,7,8,9,10};
+int *ptr;
+
+ptr=&arr[0];//ptr=arr
+
+printf("%p %d",ptr,*ptr);//1000  1
+
+ptr++;
+
+printf("%p %d",ptr,*ptr)//1004 2
+
+//if it was a character ptr , it would have decremented by 1...so type of pointer is necessary
+
+Note: ptr can change but arr address cant change
+
+better to use printf("%p %d",(ptr+i),*(ptr+i)) in a loop as ptr++ will get out of range 
+
+can also use printf("%d",ptr[i])
+
+char name[20]="CARL ZEISS BANGLORE";
+int *ptr;
+ptr=(int *)name;//allowed
+
+========================================================================
+POINTER ARITHMETIC
+
+int num[10]={};
+
+int *p1,*p2;
+
+p1=&num[0];
+p2=&num[9];
+
+//anything can be done wrt values
+*p1 + *p2
+- / *
+
+
+//address
+a)
+p1+1
+p1+ 2
+
+both allowed
+b)
+But p1+ p2 not allowed
+
+or p1 * p2 not allowed
+
+
+c) int k=p1-p2 allowed ...... net address /4 as it is int pointer
+
+int k2=(char*)p1 -(char*)p2  .......net address /1 as typecasted to character pointer
+
+
+
+Call by value doesnt reflect changes in the caller fn(main)
+
+=========================================================================
+
+Constant pointer vs Pointer constant
+
+
+a)const int *ptr; //(read from right to left....)pointer constant   value constant, addreess changed  //ptr ++ allowed    *ptr=10  not allowed
+
+eg:displayArray(const int *ptr , int size)  i.e read only
+
+Check manuals for strcmp,strlen,strcat for syntax and pointer type
+
+b)int *const ptr; // constant pointer   address constant, value changed
+
+
+int A[5]={1,2,3,4,5};
+
+int *const ptr;
+ptr=A;//not allowed 
+
+//correct version
+
+int *const ptr=A;
+
+eg:laptop has many peripherals mouse , keyboard,sdd,pendrive holder......mapped to RAM
+ and their address cannot be changed but value /data keeps on changing
+
+char *const keyboard=0x36FF;
+char *const PORTC=0x0789;
+
+
+char const* const p; //constant pointer constant
+eg:BIOS
+
+===========================
+
+sizeof  also includes '\0' //17
+
+strlen doesnt //16
+
+===========================================
+
+STATIC VS DYNAMIC ALLOCATION
+
+Array can be used only when size is known beforehand....COMPILE TIME /STATIC  MEMORY ALLOCATION.....starting to end
+
+calloc/malloc........RUNTIME /DYNAMIC  MEMORY ALLOCATION .....use free function to deallocate memory else MEMORY ALLOCATION ....malloc to free lifetime
+
+
+static:name and address
+dynamic :only address
+
+
+int *ptr=malloc(sizeof(int)* size));
+
+Whenever malloc fails: return 0;
+
+
+=> DO NOT USE HARD CODED TEXT IN PROGRAM
+DEFINE MACROS
+#define MAX 1000
+
+int main()
+{
+int size,max;
+scanf("%d",&size);
+
+int *ptr=malloc(sizeof(int)* size);
+
+if(ptr==NULL)
+{
+printf("Allocation Failure\n");
+
+}
+
+else
+{
+	printf("Enter %d elements",size);
+
+	for(int i=0;i<size;i++)
+	{
+		scanf("%d",ptr+i);
+	}
+
+	 max=*ptr;
+
+	for(int i=1;i<size;i++)
+	{	
+		if(*(ptr+i)>max)
+			{
+				max=*(ptr+i);
+			}
+	}
+
+	printf("Max:%d:",max);
+	if(ptr!=NULL) // to make sure free is not applied twice
+	{
+		free(ptr);
+		ptr=NULL;
+		}
+	
+
+}	
+
+
+return 0;
+}
+
+==================================================================
+
+FUNCTION POINTERS / CALLBACK FN :  eg ctrl c example....when key pressed ..call Handler
+void fun1()
+{printf("1");
+}
+
+void fun2()
+{printf("2");}
+
+
+void fun3()
+{printf("3");}
+
+
+void fun4()
+{printf("4");}
+
+int funint(int n1, int n2)
+{
+return n1+n2;
+}
+
+
+int main()
+{
+
+
+void (*fp)();
+fp=&fun1;
+fp();
+
+fp=&fun2;
+fp();
+
+fp=fun3;//also allowed
+fp();
+
+fp=&fun4;
+fp();
+
+
+//if int func(int num1,num2)
+
+int (*fp)(int,int);
+fp=&funint;
+int ans=fp(10,20);
+
+printf("%d",ans);
+return 0;
+
+}
+//pass one function as an argument to another function
+
+void fun3(int x, int y , void (*myfp))
+{
+myfp();
+
+}
+
+int main()
+{
+
+fun3(10,20,fun1);
+}
+
+================================================
+
+C COMPILATION PROCESS
+
+
+a)preprocessor: executes # files like #include and #define
+removes comments
+output is intermediate file
+
+gcc -E test.c -o test.i
+
+b)Translator/Compiler
+checks for syntax error or other errors
+converts high level language to assembly language
+
+gcc -S test.i 
+
+c)Assembler
+
+Converts assembly file into object file(close to machine code )/ELF..executable and linkable file
+
+gcc -c test.s
+
+d) Library
+
+It contains the definition of all the other functions
+
+e)Linker
+
+Checks if the function definition in .o are available in library 
+
+gcc test.o - o test
+./test
+
+q)mystringlength
+compare
+reverse
+
+left:copy,concatenation
+
+
+=================================================
+
+#include <stdio.h>
+#include<stdlib.h>
+
+//constant pointer 
+void myStringReverse(char *const s1)
+{
+    int indx=0;
+    while(s1[indx]!='\0')
+    {
+        indx++;
+    }
+    
+    int len=indx-1;
+    
+    int i=0,j=len-1;
+    
+    while(i<j)
+    {
+        char temp=s1[i];
+        s1[i]=s1[j];
+        s1[j]=temp;
+        i++;j--;
+    }
+    
+    
+    
+ //pointer constant   
+}
+int myStringLength(const char* s1)
+{
+    
+    int indx=0;
+    while(s1[indx]!='\0')
+    {
+        indx++;
+    }
+    
+    return indx-1;
+}
+//pointer constant
+int myStringCompare(const char* s1,const char* s2)
+{
+    int i=0,j=0;
+    while(s1[i]!='\0' && s2[j]!='\0')
+    {
+        if(s1[i]!=s2[j])
+        {
+            return 0;
+            break;
+        }
+        else
+        {
+            i++;
+            j++;
+        }
+        
+        
+    }
+    return 1;
+}
+int main() {
+    // Write C code here
+   char *s1;
+   s1=malloc(256);
+   
+   char *s2;
+   s2=malloc(256);
+   
+   printf("Enter string 1:\n");
+   fgets(s1,256,stdin);
+   
+   printf("Enter string 2:\n");
+   fgets(s2,256,stdin);
+   
+   int len1=myStringLength(s1);
+   printf("Length of string 1:%d \n",len1);
+   
+   int len2=myStringLength(s2);
+   printf("Length of string 2:%d \n",len2);
+   
+   int cmpr=myStringCompare(s1,s2);
+   if(cmpr==0) printf("UnEqual strings\n");
+   else   printf("Equal strings\n");
+   
+  
+   
+   myStringReverse(s1);
+   printf("Reversed String 1:%s",s1);
+   
+   myStringReverse(s2);
+   printf("Reversed String 2:%s",s2);
+   
+   return 0;
+}
+=================================================================
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+

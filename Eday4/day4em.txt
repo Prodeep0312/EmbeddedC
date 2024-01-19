@@ -1,0 +1,428 @@
+References in cpp
+
+Must be compulsorily initialized to a variable
+Only refer to one variable
+alias to a variable
+Used like a variable but behaviour similar to pointers
+
+--------------------------------------------------------------
+
+int main()
+{
+int num1=99 , num2=76;
+int &ref=num1; //cannot refer to any other variable now
+
+cout<<ref<<num<<endl; //99 99
+
+ref=125;//num1 =125
+
+ref++; //num1++
+
+cout<<ref<<num<<endl; //126 126
+
+ref=num2; //num1=num2
+
+cout<<ref<<num<<endl; // 76 76
+
+
+}
+----------------------------------------------------------------
+
+USE CASE OF REFERENCES
+
+
+void swap(int &r1, int &r2)
+{
+int temp=r1;
+r1=r2;
+r2=temp;
+}
+
+
+swap(num1,num2);
+
+=========================================================================
+
+STRUCTURES IN CPP
+
+this pointer holds the address of current object
+
+e1.setempData(1,2.22,"abc");
+
+//compiler sees setempData(&e1,1,2.2,"abc");
+
+e1.showempData();
+
+//showempData(&e1);
+
+Note:g++ -g filename.cpp    //debugging
+gdb ./a.out
+break main
+run
+s
+
+
+This used to avoid nameclash between local variable of fn and object variable
+
+===================================================================================
+
+CLASS VS STRUCTURES
+
+By default , data variables are:-
+class:private
+struct:public
+
+public:can be accessed even outside the class  ...like in main
+private:only accessible within the class 
+
+
+Usually
+
+private:
+	int eid;
+	float sal;
+
+public:
+
+	void showEmpData(){...
+};
+
+
+eg: private:
+	buublesort();
+	quicksort();
+    public:
+	sort();
+	//naive user wants only to sort a list , technique used internally is not displayed to user
+
+=========================================================================================================
+To define a function outside the class
+	class emp{
+
+	private:
+	//data members
+
+	public:
+	//function declaration
+
+};
+
+
+emp :: //function definition
+
+::->Scope Resolution Operator
+
+// 2 classes A and B with func declaration void Show();
+:: distinguishes classes
+
+===========================================================================================================
+
+Modular programming:
+emp.h ->only class declaration
+emp.cpp->only class definition
+main.cpp
+
+============================================================================================================
+
+SYNTHESIZED FUNCTION BY COMPILER AUTOMATICALLY ( FAB 4)
+
+a)Default const
+b)Default dest
+c)Copy const
+d)Assignment operator
+
+---------------------------------------------------------------------------------------------------------------
+
+
+No overloading in destructor
+
+-----------------------------------
+
+
+emp* eptr;
+
+eptr=(emp*)malloc(sizeof(emp));
+
+eptr->showData();
+
+
+
+
+//malloc wont call a constructor because C doesnt have constructor concept
+
+---------------------------------------------------------
+
+emp* eptr;
+eptr =new emp;
+eptr->showData();
+delete eptr;
+
+
+emp* eptr;
+eptr =new emp[5];
+(eptr)->showData();
+(eptr+1)->showData();
+
+delete []eptr;
+
+
+-----------------------------------------------------------------------
+MALLOC VS NEW
+
+
+Malloc creates an obj but new constructs an object
+
+So , using new we can access constructor, but not so using malloc
+
+----------------------------------------------------------------------
+Note:
+1)nothing can be initialized in data members part of class/struct
+2)constant members need to initialized only through initializer list for constructor fn
+3)references need to initialized only through initializer list for constructor fn
+Initializing constants inside constructor
+
+**q) Write code for it in cpp
+class emp{
+
+int eid;
+float salary;
+char* name;
+const int count;
+int &r;
+
+public:
+
+
+emp(int id , float s, char* n, int num ) :count(num),r(eid)       //initializer list
+
+{
+
+
+
+}
+};
+
+-----------------------------------------------------------------------------------
+Copy Constructors
+
+
+-----------------------------------------------
+
+SHALLOW VS DEEP COPY
+
+1)2 times free in shallow copy
+2)On changing name of ob2, name of ob1 also changes in shallow copy
+because char* name holds address
+
+Deep copy: we use user defined copy constructor 
+
+myClass(myClass &o) // o->ob1  this->ob2
+
+myClass ob2(ob1);
+Shallow copy: copy constructor of compiler
+mODIFY one obj, it will affect all other objects
+
+A constructor can only takes refernce of obj  as an arg and not normal obj 
+**q) Why do we use references inside UDT copy constructor ??
+
+hw) Write complete program
+
+---------------------------------------------------------------------------------------
+
+FRIEND FUNCTIONS
+
+If we want some fns to access private members of another class
+
+class myClass
+{
+private:
+int a,b;
+public:
+
+friend void fun();
+friend int main();
+};
+
+
+void myfun()
+{
+
+myClass o1(99,88);
+
+o1.a=10;
+o1.b=20;
+
+}
+
+-------------------------------------------------------------------------------------------
+
+TEMPLATES
+
+They are generic
+Independent of data type
+
+eg:swap fn
+
+//this depends on the no. of data types which we are passing
+
+template<typename T> 
+void swap(T &a, T &b)
+
+{
+	T temp;
+	temp=a;
+	a=b;
+	b=temp;
+
+
+}
+
+//Everytime a copy of fn is created for diff data types
+//Generated by Compiler ...Saves Users time
+//Space optimization Issues
+
+//if we want to swap for int dtype and only if both are +ve
+
+
+
+template<> 
+void swap(int &a, int &b)
+
+{
+	int temp;
+
+if(a>0 && b>0)
+
+{
+	temp=a;
+	a=b;
+	b=temp;
+
+}
+	
+
+
+}
+
+//When both specialized and template fn are available
+it goes to specialized fn
+
+-------------------------------------
+
+template<typename T> 
+T findMax(T &a, T &b)
+
+{
+	T x;
+	x=(a>b)?a:b;
+	return x;
+
+
+}
+
+---------------------------------------------
+
+
+
+template<typename T1,typename T2,typename T3>
+
+void displayData(T1 &a,T2 &B, T3 &c)
+
+
+{
+cout<<"a="<<a<<endl;
+cout<<"b="<<b<<endl;
+cout<<"c="<<c<<endl;
+
+
+
+}
+
+
+int main()
+{
+int x=-10;
+char s1='a';
+double d1=12.3;
+
+
+displayData(x,s1,d1);
+displayData(s1,d1,x);
+displayData(s1,x,d1);
+displayData(d1,x,s1);
+
+
+return 0;
+}
+
+------------------------------------------------------------------------
+
+TEMPLATE CLASSES
+
+template<typename T>
+class stack{
+//replace int by T
+
+
+}
+
+stack<int> is1;
+
+
+----------------------------------------------------------
+DEFAULT TEMPLATE ARGUMENT
+
+
+Note:
+template<typename T =int>
+class stack{
+//replace int by T
+
+
+}
+
+stack<> is1;
+--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,542 @@
+TYPEDEF
+
+typedef unsigned int ui;
+typedef short int si;
+typedef int* intptr;
+
+ui x,y,z;
+
+si a,b;
+
+intptr p1,p2;
+----------------------------------------------------------------
+
+
+STRUCTURES
+
+Holds multiple data of different data types
+
+eg:Employee data
+
+Instance/variable of structure is called an Object
+
+Structure never gets memory
+Object gets the memory and depends on the structure
+Structure member cannot be initialized inside the structure
+Can only be initialized once the object is created
+----------------------------------------------------------
+
+struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+};
+
+void main()
+{
+
+
+struct emp e1,e2;
+
+//sizeof(e1) will be 48 bytes
+}
+
+----------------------------------------------------------------
+
+struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+};
+typedef struct emp emp;
+
+void main()
+{
+
+
+emp e1,e2;
+
+//sizeof(e1) will be 48 bytes
+}
+
+------------------------------------------------------------------------
+
+#include <stdio.h>
+#include<stdlib.h>
+typedef struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+} EMP;
+int main() {
+    
+   EMP e1,e2; 
+   
+   e1.eid=123;
+
+
+strcpy(e1.name,"Rahul");
+
+printf("e1 eid=%d \n",e1.eid);
+
+printf("e1 name=%s \n",e1.name);
+
+    
+
+    return 0;
+}
+---------------------------------------------------------------
+
+
+typedef struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+} EMP;
+
+void main()
+{
+
+
+EMP e1,e2; //EMP is UDDT
+
+//sizeof(e1) will be 48 bytes
+
+printf("Enter employee1 id:");
+scanf("%d",&e1.eid);
+
+printf("Enter employee1 name:");
+scanf("%d",e1.name);
+
+return 0;
+
+
+
+}
+-----------------------------------------------
+
+EMP e1={1234,99000.88,"Rahul","Rahul@gmail.com"}; 
+//obj creation as well as initiation
+//only initialize certain members
+
+EMP e1={.eid=1234,.email="Rahul@gmail.com"};
+//These are C89 standards
+
+1)obj creation and initialize list
+2)dot initialization
+3)scanf
+
+
+---------------------------------------------------
+
+STRUCTURE PADDING
+
+CPU & RAM communicate with 32 bit Bus ie a multiple of 4
+
+Structure padding is a concept in C that adds the one or
+ more empty bytes between the memory addresses to align the data in memory.
+
+to disable padding:#pragma pack(1)
+
+-------------------------------------------------------
+
+STRUCTURE POINTERS
+
+#include <stdio.h>
+#include<stdlib.h>
+
+
+
+typedef struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+} emp;
+
+void main()
+{
+
+
+emp *ptr;
+
+emp e1={1234,99000.88,"Rahul","Rahul@gmail.com"}; 
+emp e2={1235,99000.67,"Hardik","Hardik@gmail.com"}; 
+
+ptr=&e1;
+
+printf("e1 eid=%d\n",ptr->eid);
+printf("e1 sal=%f\n",ptr->sal);
+printf("e1 name=%s\n",ptr->name);
+printf("e1 email=%s\n",ptr->email);
+
+ptr=&e2;
+
+printf("e2 eid=%d\n",ptr->eid);
+printf("e2 sal=%f\n",ptr->sal);
+printf("e2 name=%s\n",ptr->name);
+printf("e2 email=%s\n",ptr->email);
+
+// -> is used as there are multiple data in emp ..so * not used
+
+
+return 0;
+
+}
+
+-------------------------------------------------------------------------------------------
+
+DYNAMIC ALLOCATION
+
+emp *ptr;
+
+ptr=malloc(sizeof(emp));
+
+--------------------------------
+#include <stdio.h>
+#include<stdlib.h>
+
+
+
+typedef struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+char email[20];
+} emp;
+
+void main()
+{
+
+
+emp *ptr;
+ptr=malloc(sizeof(emp));
+
+
+
+printf("Enter e1 eid:\n");
+scanf("%d",&ptr->eid);
+
+printf("Enter e1 salary:\n");
+scanf("%f",&ptr->sal);
+
+printf("Enter e1 name:\n");
+scanf("%s",ptr->name);
+
+printf("Enter e1 email:\n");
+scanf("%s",ptr->email);
+
+printf("e1 eid=%d\n",ptr->eid);
+printf("e1 sal=%f\n",ptr->sal);
+printf("e1 name=%s\n",ptr->name);
+printf("e1 email=%s\n",ptr->email);
+
+free(ptr);
+
+
+return 0;
+
+}
+-----------------------------------------------
+
+STRUCTURE ARRAY or ARRAY OF OBJECTS
+
+typedef struct emp
+{
+
+int eid;
+float sal;
+char name[20];
+
+} Emp;
+
+void main()
+{
+Emp employees[5];
+//array of Emp type with 5 objects 
+//total size:28x5 =140 bytes
+
+printf("Size of employees:%ld \n",sizeof(employees));
+
+return 0;
+
+}
+
+
+-------------------------------------------------------------------------------------
+
+Emp employees[5]={ {},{},{},{},{}};
+//fill them with values
+
+for(int i=0;i<5;i++)
+{
+printf("EID :%d",employees[i].eid);
+printf("Salary :%f",employees[i].sal);
+printf("Name :%s",employees[i].name);
+
+
+}
+
+
+----------------------------------------------------------------------------------------
+	IF NOT HARD CODED
+
+for(int i=0;i<5;i++)
+
+{
+scanf("%d",&employees[i].eid);
+scanf("%f",&employees[i].sal);
+scanf("%s",employees[i].name);
+
+}
+
+------------------------------------------------------------------------------------------
+what if no of emp >5 ...DYNAMIC
+
+scanf("%d",size);
+
+struct emp *p ;
+p=malloc(size*sizeof(emp));
+
+for(int i=0;i<size;i++)
+
+{
+scanf("%d",&(p+i)->eid);
+scanf("%f",&(p+i)->sal);
+scanf("%s",(p+i)->name);
+
+}
+Note:Dynamic objects cannot be initialized in C
+------------------------------------------------------------------------------------------
+NESTED STRUCTURE
+
+#include <stdio.h>
+#include<stdlib.h>
+
+typedef struct address{
+int Hno;
+int PIN;
+char apt_name[20];
+char area_name[20];
+char city[20];
+
+}address;
+
+
+typedef struct emp{
+int eid;
+float sal;
+char name[20];
+address addr;
+
+}emp;
+
+void main()
+{
+
+emp e1={123,98000,"Prodeep",{115,560043,"Prestige ","Horamavau","Bangalore"}};
+
+printf("Employee id:%d",e1.eid);
+printf("Employee Hno:%d",e1.addr.Hno);
+
+return 0;
+
+}
+
+=========================================================
+
+emp *p1;
+p1=&e1;
+
+//printf
+
+p1->eid;
+p1->sal;
+p1->addr.Hno;
+-----------------------------------------------------
+
+#include <stdio.h>
+#include<stdlib.h>
+
+typedef struct address{
+int Hno;
+int PIN;
+char apt_name[20];
+char area_name[20];
+char city[20];
+
+}address;
+
+
+typedef struct emp{
+int eid;
+float sal;
+char name[20];
+address addr;
+
+}emp;
+
+void main()
+{
+
+emp e1={123,98000,"Prodeep",{115,560043,"Prestige ","Horamavau","Bangalore"}};
+
+emp *p1;
+p1=&e1;
+
+
+printf("Employee id:%d",p1->eid);
+printf("Employee Hno:%d",p1->addr.Hno);
+
+return 0;
+
+}
+------------------------------------------------------------
+==============================================================
+BIT FIELDS
+
+When we want to play with bits instead of bytes
+
+float
+
+1bit -sign
+8bits-exponent
+23bits -mantissa
+
+disadv:
+
+1)int/char  can be of any number of bits =>only declared as bitfield
+float/double cannot be declared as bitfield
+
+2)Overflow can occur
+
+3)We cannot take address of bitfield...cannot be accessed through pointers
+scanf("%d",&obj.var1);//not valid
+
+4)We cannot declare bitfield as an array
+
+
+----------------------------------------------------------------------------------
+
+#include<stdio.h>
+
+typedef struct Test
+{
+
+unsigned int var1:5;
+//var 1 takes only 5 bits out of 32 bits
+unsigned int var2:3;
+unsigned int var3:4;
+unsigned int var4:3;
+unsigned int var5:1;
+unsigned int var6:5;
+unsigned int var7:4;
+unsigned int var8:2;
+unsigned int var9:3;
+
+}Test;
+
+void main()
+{
+Test obj;
+
+printf("Size of obj :%ld",sizeof(obj));
+
+//36 normally bytes
+//bit field se size is 4 bytes
+
+//if var8:5 and var9:4
+//new size: 8 bytes
+
+}
+
+note=> 1)for int : goes from 0 to 31
+
+if we want to store 14 (1110) in var 2 which has 3 bits ...MSB will be ignored(110..6 stored) 
+
+because of overflow
+
+
+
+
+--------------------------------------------------------------------------------------------------
+
+PRACTICAL APPLICATION OF BITFIELD
+
+struct CTIME0{
+
+unsigned int secs:6;
+//anonymous bitfield
+unsigned int     :2;
+unsigned int mins:6;
+unsigned int     :2;
+unsigned int hrs :5;
+unsigned int      :3;
+unsigned int dow :3;
+unsigned int     :5;
+
+};
+
+
+struct CTIME0 t0;
+
+t0=*(0xE0024014);
+
+//reading from address of register
+
+printf("%d ::%d :: %d ::%d \n",t0.dow,t0.hrs,t0.mins,t0.secs);
+
+--------------------------------------------------------------------------------
+
+Note:Structures are not enough
+as they only store variables 
+and not functions
+
+...DISCOVERY OF CLASSES 
+CLASS has VARIABLES and FUNCTIONS
+
+C++= C+ CLASSES+ 4 Pillars of OOPS
+
+--------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

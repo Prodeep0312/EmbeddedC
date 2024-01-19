@@ -1,0 +1,162 @@
+Cpp header files dont have .h
+eg:	#include<string>
+
+----------------------------
+
+using namespace std;
+
+std::cout<<"Hello World"<<endl;
+
+----------------------------------
+
+cout is an object of class ostream ,,which is included in iostream
+
+----------------------------------------------------------------------------
+
+class ostream {
+
+
+rt<<(int)
+{
+
+}
+
+rt<<(float)
+{
+
+}
+
+}
+
+ostream cout;
+-------------------------------------------------------------------------------
+
+int inum=9;
+float fnum=9.0;
+
+cout<<inum;//cout.<<(inum)
+cout<<fnum;//cout.<<(fnum)
+
+Note:This is an eg of function overloading and polymorphism
+
+compiling cpp files :g++ first.cpp
+./a.out
+
+----------------------------------------------------------------------------------------
+
+int inum=255;
+
+cout<<inum<<endl//255
+cout<<hex<<inum<<endl;//FF
+cout<<oct<<inum<<endl;//377
+cout<<inum<<endl;//377
+cout<<dec<<inum<<endl;//255
+cout<<inum<<endl;//255
+
+---------------------------------------------------------------------------------------------
+
+cin is an object that  belongs to istream class 
+
+cin>>num
+//here >> is called extractor and << is called insertor
+
+Note: cin doesnt read spaces
+So cin.getline() is used
+
+---------------------------------------------------------------------------------------------
+
+Cpp functions can have default arg .But not possible in C
+
+double mySimpleInterest(int P, int Y,int R=10)
+{
+
+double total=P +(P*R*Y/100);
+return total;
+
+}
+
+
+mySimpleInterest(90000,5,9);//R=9
+mySimpleInterest(90000,5);//here default R=10
+
+Note: mySimpleInterest(int P, int Y=1,int R) //invalid
+
+R should also have default arg
+i.e start default arg from right
+
+
+---------------------------------------------------------------------------------------------------
+
+C doesnt support fn overloading
+
+Note:fn overloading can have different:-
+a)no of arg
+b)type of arg
+c)order of arg
+
+Return type has nothing to do with fn overloading
+
+-------------------------------------------------------------------------------------------
+
+Note :myfunc(10.55) 
+//It will go to double arg function and not float...ANSII standard
+
+myfunc(10.55f) 
+//It will go to float arg function
+
+-------------------------------------------------------------------------------------------
+AMBIGUOUS FUNCTION
+
+a)
+
+void func(int num1)
+void func(int num1, int num2=0)
+
+
+func(20);
+//Compiler cannot decide which fn to invoke
+
+b)
+
+void func(float num)
+void func(double num)
+
+func(20);
+//AMBIGUOUS as there are 2 candidates
+
+
+
+----------------------------------------------------------------------------------------------
+
+void func(double num)
+
+func(10.55f); //go to double as float func not available
+func(10);//go to double as int  func not available
+
+-------------------------------------------------------------------------------------------------
+Application of fn overloading
+
+SearchCharInString(char *p,char ch);//searches from start
+
+SearchCharInString(char *p,char ch, int sPos);//searches from start Position
+
+-------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
